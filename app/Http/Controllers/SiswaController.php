@@ -46,7 +46,7 @@ class SiswaController extends Controller
             'nis' => 'required|unique:siswas',
             'telp' => 'required',
             'alamat' => 'required',
-            'kelas_id' => 'required|unique:siswas',
+            // 'kelas_id' => 'required|unique:siswas',
             'foto' => 'required|image|mimes:jpeg,png,jpg|max:2048'
         ], [
             'nis.unique' => 'NIS sudah terdaftar',

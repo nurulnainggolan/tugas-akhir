@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Absensi;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -20,5 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(JadwalSeeder::class);
         $this->call(SiswaSeeder::class);
         $this->call(UserSeeder::class);
+        // $this->call(Absensi::class);
+        // $this->call(MeetingSeeder::class);
     }
 }

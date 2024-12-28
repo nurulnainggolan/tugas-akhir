@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', 'Edit Kelas')
+@section('title', 'Edit Absensi')
 
 @section('content')
     <section class="section">
@@ -20,27 +20,33 @@
                     @endif
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
-                            <h4>Edit Kelas {{ $kelas->nama_kelas }}</h4>
-                            <a href="{{ route('kelas.index') }}" class="btn btn-primary">Kembali</a>
+                            <h4>Edit absensi {{ $absensi->kelas->nama_kelas }}</h4>
+                            <a href="{{ route('absensi.index') }}" class="btn btn-primary">Kembali</a>
                         </div>
                         <div class="card-body">
-                            <form method="POST" action="{{ route('kelas.update', $kelas->id) }}">
+                            <form method="POST" action="{{ route('absensi.update', $absensi->id) }}">
                                 @csrf
                                 @method('PUT')
                                 <div class="form-group">
-                                    <label for="nama_kelas">Nama Kelas</label>
-                                    <input type="text" id="nama_kelas" name="nama_kelas"
-                                        class="form-control @error('nama_kelas') is-invalid @enderror"
-                                        placeholder="{{ __('Nama Mata Pelajaran') }}" value="{{ $kelas->nama_kelas }}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="guru_id">Wali Kelas</label>
+                                    <label for="guru_id">Guru Pengampu</label>
                                     <select id="guru_id" name="guru_id"
                                         class="select2bs4 form-control @error('guru_id') is-invalid @enderror">
-                                        <option value="">-- Pilih Wali Kelas --</option>
+                                        <option value="">-- Pilih Guru Pengampu --</option>
                                         @foreach ($guru as $data)
                                             <option value="{{ $data->id }}"
-                                                @if ($kelas->guru_id == $data->id) selected @endif>{{ $data->nama }}
+                                                @if ($absensi->guru_id == $data->id) selected @endif>{{ $data->nama }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="kelas_id">Kelas</label>
+                                    <select id="kelas_id" name="kelas_id"
+                                        class="select2bs4 form-control @error('kelas_id') is-invalid @enderror">
+                                        <option value="">-- Pilih Kelas --</option>
+                                        @foreach ($kelas as $data)
+                                            <option value="{{ $data->id }}"
+                                                @if ($absensi->kelas_id == $data->id) selected @endif>{{ $data->nama_kelas }}
                                             </option>
                                         @endforeach
                                     </select>

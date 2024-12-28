@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', 'List Siswa')
+@section('title', 'List Absensi')
 
 @section('content')
     <section class="section custom-section">
@@ -8,9 +8,11 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
-                            <h4>List Siswa</h4>
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i
-                                    class="nav-icon fas fa-folder-plus"></i>&nbsp; Tambah Data Guru</button>
+                            <h4>List Absensi</h4>
+                            @can('admin')
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i
+                                        class="nav-icon fas fa-folder-plus"></i>&nbsp; Tambah Data Absensi</button>
+                            @endcan
                         </div>
                         <div class="card-body">
                             @if ($message = Session::get('success'))
@@ -22,43 +24,46 @@
                                         {{ $message }}
                                     </div>
                                 </div>
+                            @else
                             @endif
                             <div class="table-responsive">
                                 <table class="table table-striped" id="table-2">
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Nama Siswa</th>
-                                            <th>NIS</th>
                                             <th>Kelas</th>
+                                            <th>Guru Pengampu</th>
+                                            <th>Mata Pelajaran</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($siswa as $result => $data)
+                                        @foreach ($absensi as $data)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $data->nama }}</td>
-                                                <td>{{ $data->nis }}</td>
                                                 <td>{{ $data->kelas->nama_kelas }}</td>
+                                                <td>{{ $data->guru->nama }}</td>
+                                                <td>{{ $data->guru->mapel->nama_mapel }}</td>
                                                 <td>
                                                     <div class="d-flex">
-                                                        <a href="{{ route('siswa.show', Crypt::encrypt($data->id)) }}"
+                                                        <a href="{{ route('absensi.show', Crypt::encrypt($data->id)) }}"
                                                             class="btn btn-primary btn-sm" style="margin-right: 8px"><i
-                                                                class="nav-icon fas fa-user"></i> &nbsp; Profile</a>
-                                                        <a href="{{ route('siswa.edit', Crypt::encrypt($data->id)) }}"
-                                                            class="btn btn-success btn-sm"><i
-                                                                class="nav-icon fas fa-edit"></i> &nbsp; Edit</a>
-                                                        <form method="POST"
-                                                            action="{{ route('siswa.destroy', $data->id) }}">
-                                                            @csrf
-                                                            @method('delete')
-                                                            <button class="btn btn-danger btn-sm show_confirm"
-                                                                data-toggle="tooltip" title='Delete'
-                                                                style="margin-left: 8px"><i
-                                                                    class="nav-icon fas fa-trash-alt"></i> &nbsp;
-                                                                Hapus</button>
-                                                        </form>
+                                                                class="nav-icon fas fa-eye"></i> &nbsp; Lihat</a>
+                                                        @can('admin')
+                                                            <a href="{{ route('absensi.edit', $data->id) }}"
+                                                                class="btn btn-success btn-sm"><i
+                                                                    class="nav-icon fas fa-edit"></i> &nbsp; Edit</a>
+                                                            <form method="POST"
+                                                                action="{{ route('absensi.destroy', $data->id) }}">
+                                                                @csrf
+                                                                @method('delete')
+                                                                <button class="btn btn-danger btn-sm show_confirm"
+                                                                    data-toggle="tooltip" title='Delete'
+                                                                    style="margin-left: 8px"><i
+                                                                        class="nav-icon fas fa-trash-alt"></i> &nbsp;
+                                                                    Hapus</button>
+                                                            </form>
+                                                        @endcan
                                                     </div>
                                                 </td>
                                             </tr>
@@ -73,13 +78,13 @@
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Tambah Siswa</h5>
+                                <h5 class="modal-title">Tambah Absensi</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="{{ route('siswa.store') }}" method="POST" enctype="multipart/form-data">
+                                <form action="{{ route('absensi.store') }}" method="POST">
                                     @csrf
                                     <div class="row">
                                         <div class="col-md-12">
@@ -96,30 +101,9 @@
                                                 </div>
                                             @endif
                                             <div class="form-group">
-                                                <label for="nama">Nama Siswa</label>
-                                                <input type="text" id="nama" name="nama"
-                                                    class="form-control @error('nama') is-invalid @enderror"
-                                                    placeholder="{{ __('Nama Siswa') }}">
-                                            </div>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="form-group">
-                                                    <label for="nis">NIS</label>
-                                                    <input type="number" id="nis" name="nis"
-                                                        class="form-control @error('nis') is-invalid @enderror"
-                                                        placeholder="{{ __('NIS Siswa') }}">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="telp">No. Telp</label>
-                                                    <input type="number" id="telp" name="telp"
-                                                        class="form-control @error('telp') is-invalid @enderror"
-                                                        placeholder="{{ __('No. Telp Siswa') }}">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
                                                 <label for="kelas_id">Kelas</label>
-                                                <select id="kelas_id" name="kelas_id"
-                                                    class="select2 form-control @error('kelas_id') is-invalid @enderror">
-                                                    <option value="">-- Pilih kelas --</option>
+                                                <select id="kelas_id" name="kelas_id" class="select2 form-control ">
+                                                    <option value="">-- Pilih Kelas --</option>
                                                     @foreach ($kelas as $data)
                                                         <option value="{{ $data->id }}">{{ $data->nama_kelas }}
                                                         </option>
@@ -127,24 +111,21 @@
                                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <label>Alamat</label>
-                                                <textarea id="alamat" name="alamat" class="form-control @error('alamat') is-invalid @enderror"
-                                                    placeholder="{{ __('Alamat') }}"></textarea>
+                                                <label for="guru_id">Guru Pengampu</label>
+                                                <select id="guru_id" name="guru_id" class="select2 form-control ">
+                                                    <option value="">-- Pilih Guru Pengampu --</option>
+                                                    @foreach ($guru as $data)
+                                                        <option value="{{ $data->id }}">{{ $data->nama }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                             <div class="form-group">
-                                                <label for="foto">Foto Siswa</label>
-                                                <div class="input-group">
-                                                    <div class="custom-file">
-                                                        <input id="foto" type="file" name="foto"
-                                                            class="form-control @error('foto') is-invalid @enderror"
-                                                            id="foto">
-                                                        <label class="custom-file-label" for="foto">Pilih file</label>
-                                                    </div>
-                                                </div>
+                                                <label for="mapel">Mata Pelajaran</label>
+                                                <input class="form-control" readonly type="text" id="mapel" />
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="modal-footer br">
+                                    <div class="modal-footer  br">
                                         <button type="button" class="btn btn-danger" data-dismiss="modal">Tutup</button>
                                         <button type="submit" class="btn btn-primary">Simpan</button>
                                     </div>

@@ -159,4 +159,13 @@ class GuruController extends Controller
 
         return back()->with('success', 'Data mapel berhasil dihapus!');
     }
+
+
+   
+
 }
+
+
+
+
+    

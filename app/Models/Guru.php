@@ -11,7 +11,18 @@ class Guru extends Model
 
     protected $fillable = ['nip', 'nama', 'mapel_id', 'no_telp', 'alamat', 'foto'];
 
-    public function mapel() {
+    public function mapel()
+    {
         return $this->belongsTo(Mapel::class, 'mapel_id');
+    }
+
+    public function nilai()
+    {
+        return $this->hasMany(Nilai::class);
+    }
+
+    public function kelas()
+    {
+        return $this->hasMany(Kelas::class);
     }
 }

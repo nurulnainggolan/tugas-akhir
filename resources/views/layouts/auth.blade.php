@@ -15,7 +15,7 @@
                     <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3">
                         <div class="login-brand">
                             {{-- <img src="{{ asset('assets/img/logo.png') }}" alt="logo" width="100" class="shadow-lights"> --}}
-                            <p>{{ config('app.name') }}</p>
+                            <p>SiAna</p>
                         </div>
                         @if(session()->has('info'))
                         <div class="alert alert-primary">
@@ -29,7 +29,7 @@
                         @endif
                         @yield('content')
                         <div class="simple-footer">
-                            Copyright &copy; ANKH Digital {{ date('Y') }}
+                            Copyright &copy; SMK Nahanson {{ date('Y') }}
                         </div>
                     </div>
                 </div>
